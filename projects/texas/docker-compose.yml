@@ -4,19 +4,21 @@ networks:
     driver: bridge
 services:
   libpostal:
-    image: mr1dsgn/libpostal-service
+    image: pelias/libpostal-service
     container_name: pelias_libpostal
     user: "${DOCKER_USER}"
     restart: always
     ports: [ "127.0.0.1:4400:4400" ]
   schema:
-    image: mr1dsgn/schema
+    image: pelias/schema:master
     container_name: pelias_schema
     user: "${DOCKER_USER}"
     volumes:
+      - "./synonyms/custom_name.txt:/code/pelias/schema/synonyms/custom_name.txt"
+      - "./synonyms/custom_street.txt:/code/pelias/schema/synonyms/custom_street.txt"
       - "./pelias.json:/code/pelias.json"
   api:
-    image: mr1dsgn/api
+    image: pelias/api:master
     container_name: pelias_api
     user: "${DOCKER_USER}"
     restart: always
@@ -25,7 +27,7 @@ services:
     volumes:
       - "./pelias.json:/code/pelias.json"
   placeholder:
-    image: mr1dsgn/placeholder
+    image: pelias/placeholder:master
     container_name: pelias_placeholder
     user: "${DOCKER_USER}"
     restart: always
@@ -36,7 +38,7 @@ services:
       - "${DATA_DIR}:/data"
       - "./blacklist/:/data/blacklist"
   whosonfirst:
-    image: mr1dsgn/whosonfirst
+    image: pelias/whosonfirst:master
     container_name: pelias_whosonfirst
     user: "${DOCKER_USER}"
     volumes:
@@ -44,7 +46,7 @@ services:
       - "${DATA_DIR}:/data"
       - "./blacklist/:/data/blacklist"
   openstreetmap:
-    image: mr1dsgn/openstreetmap
+    image: pelias/openstreetmap:master
     container_name: pelias_openstreetmap
     user: "${DOCKER_USER}"
     volumes:
@@ -52,7 +54,7 @@ services:
       - "${DATA_DIR}:/data"
       - "./blacklist/:/data/blacklist"
   openaddresses:
-    image: mr1dsgn/openaddresses
+    image: pelias/openaddresses:master
     container_name: pelias_openaddresses
     user: "${DOCKER_USER}"
     volumes:
@@ -60,14 +62,14 @@ services:
       - "${DATA_DIR}:/data"
       - "./blacklist/:/data/blacklist"
   transit:
-    image: mr1dsgn/transit
+    image: pelias/transit:master
     container_name: pelias_transit
     user: "${DOCKER_USER}"
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   csv-importer:
-    image: mr1dsgn/csv_importer
+    image: pelias/csv-importer:master
     container_name: pelias_csv_importer
     user: "${DOCKER_USER}"
     volumes:
@@ -75,14 +77,14 @@ services:
       - "${DATA_DIR}:/data"
       - "./blacklist/:/data/blacklist"
   polylines:
-    image: mr1dsgn/polylines
+    image: pelias/polylines:master
     container_name: pelias_polylines
     user: "${DOCKER_USER}"
     volumes:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   interpolation:
-    image: mr1dsgn/interpolation
+    image: pelias/interpolation:master
     container_name: pelias_interpolation
     user: "${DOCKER_USER}"
     restart: always
@@ -92,7 +94,7 @@ services:
       - "./pelias.json:/code/pelias.json"
       - "${DATA_DIR}:/data"
   pip:
-    image: mr1dsgn/pip-service
+    image: pelias/pip-service:master
     container_name: pelias_pip-service
     user: "${DOCKER_USER}"
     restart: always
